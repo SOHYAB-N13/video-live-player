@@ -1,119 +1,72 @@
-<div align="center">
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.10+"/>
+  <img src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" alt="License: MIT"/>
+  <img src="https://img.shields.io/badge/Platform-Windows-blue.svg?style=for-the-badge&logo=windows&logoColor=white" alt="Platform: Windows"/>
+</p>
 
-# پخش زنده ویدیو / Live Video Player
+<h1 align="center">🎬 Live Video Player</h1>
 
-پخش آنلاین ویدیو از لینک مستقیم (HTTP/HTTPS) با رابط کاربری تیره و مدرن.
-
-Stream online video from direct HTTP/HTTPS links with a modern dark UI.
-
-</div>
+<p align="center">
+  <em>پخش آنلاین ویدیو از لینک مستقیم</em> ·
+  <em>Stream online video from direct links</em>
+</p>
 
 ---
 
-## فارسی
+## 🇬🇧 English
 
-### معرفی
+### 📖 About
 
-این برنامه یک پخش‌کننده ویدیو از **لینک مستقیم** است. کافی است لینک یک فایل ویدیویی را وارد کنید؛ برنامه
-ویدیو را با دانلود موازی و بافر درون‌حافظه، روان و بدون قطعی پخش می‌کند.
+**Live Video Player** is a desktop application that plays video from a **direct
+media link** (`http` / `https`). Just paste the link and the app streams the
+video smoothly — using **parallel downloads** and an **in-memory buffer** to
+keep playback fast and interruption-free.
 
-### امکانات
+### ✨ Features
 
-- پخش ویدیو از لینک مستقیم `http://` یا `https://`
-- دانلود موازی با چند اتصال برای سرعت بیشتر
-- بافر (Cache) در RAM با قابلیت تنظیم اندازه
-- پشتیبانی از درخواست‌های `Range` و حالت جایگزین برای سرورهای بدون پشتیبانی Range
-- دو حالت پخش:
-  - **HTML5** درون خود برنامه (شروع سریع و کنترل کامل)
-  - **VLC** برای فرمت‌هایی که مرورگر پشتیبانی نمی‌کند (مانند MKV و AVI)
-- پخش از طریق پروکسی لوکال (loopback) برای محافظت از لینک اصلی
-- رابط کاربری تیره و فارسی
-- نادیده گرفتن خطای گواهی HTTPS (با `--insecure`)
+| Feature | Description |
+| --- | --- |
+| ⚡ Parallel downloads | Multi-connection fetching for higher throughput |
+| 🧠 RAM cache | Configurable in-memory buffer (default 256 MiB) |
+| 📡 `Range` support | Plays Range-capable servers, plus a fallback mode for servers without it |
+| 🎞️ Two playback modes | **HTML5** inside the app, or **VLC** for formats the browser can't play (MKV, AVI…) |
+| 🔒 Loopback proxy | Streams through a local proxy so the original link stays hidden |
+| 🌑 Dark UI | Modern, dark, RTL-ready interface |
+| 🛡️ `--insecure` | Ignore HTTPS certificate errors when needed |
 
-### نصب و اجرا از سورس
+### 🚀 Install & run from source
 
-پیش‌نیازها: پایتون ۳.۱۰ به بالا
+Prerequisites: **Python 3.10 or newer**
 
 ```bash
+# 1. Install dependencies
 pip install -r requirements.txt
+
+# 2. Run the app
 python main.py
 ```
 
-### اجرا با پارامتر
+### 🎯 Usage
 
 ```bash
 python main.py --url https://example.com/video.mp4 --cache 512
 ```
 
-| پارامتر | توضیح |
+#### Command-line options
+
+| Option | Description |
 | --- | --- |
-| `--url` | لینک مستقیم ویدیو هنگام شروع |
-| `--cache` | حداکثر بافر در RAM به مگابایت (پیش‌فرض: ۲۵۶) |
-| `--keep-ahead` | حداکثر فاصله دریافت در حالت بدون Range (پیش‌فرض: ۶۴) |
-| `--workers` | تعداد اتصال‌های موازی (پیش‌فرض: ۳) |
-| `--insecure` | نادیده گرفتن خطای گواهی HTTPS |
-| `--debug` | فعال‌سازی کنسول توسعه WebView |
-
-> نکته: برای پخش فرمت‌هایی که مرورگر پشتیبانی نمی‌کند، باید [VLC](https://www.videolan.org/vlc/)
-> نصب باشد.
-
-### ساخت نسخه اجرایی (EXE)
-
-```bash
-pip install pyinstaller
-python -m PyInstaller build.spec --noconfirm --clean
-```
-
----
-
-## English
-
-### About
-
-This is a streaming video player for **direct media links**. Paste a direct link to a video file and
-the app streams it smoothly using parallel downloads and an in-memory buffer.
-
-### Features
-
-- Plays video from direct `http://` / `https://` links
-- Parallel multi-connection downloads for higher throughput
-- RAM cache with configurable size
-- Supports `Range` requests plus a fallback mode for servers without Range support
-- Two playback modes:
-  - **HTML5** inside the app (fast start, full controls)
-  - **VLC** for formats the browser cannot play (e.g. MKV, AVI)
-- Streams through a loopback proxy so the original link stays hidden
-- Dark, modern UI
-- Ignore HTTPS certificate errors (`--insecure`)
-
-### Install & run from source
-
-Prerequisites: Python 3.10+
-
-```bash
-pip install -r requirements.txt
-python main.py
-```
-
-### Usage
-
-```bash
-python main.py --url https://example.com/video.mp4 --cache 512
-```
-
-| Argument | Description |
-| --- | --- |
-| `--url` | Direct video link to play on startup |
-| `--cache` | Max RAM buffer in MiB (default: 256) |
-| `--keep-ahead` | Max fetch lead in no-range mode in MiB (default: 64) |
-| `--workers` | Number of parallel download connections (default: 3) |
+| `--url <link>` | Direct video link to play on startup |
+| `--cache <mb>` | Max RAM buffer in MiB *(default: 256)* |
+| `--keep-ahead <mb>` | Max fetch lead in no-range mode in MiB *(default: 64)* |
+| `--workers <n>` | Number of parallel download connections *(default: 3)* |
 | `--insecure` | Ignore HTTPS certificate errors |
 | `--debug` | Keep the WebView development console enabled |
 
-> Note: [VLC](https://www.videolan.org/vlc/) is required to play formats the
-> browser does not support.
+> 💡 **Note:** [VLC](https://www.videolan.org/vlc/) must be installed to play
+> formats the browser does not support.
 
-### Building the executable
+### 📦 Building the executable
 
 ```bash
 pip install pyinstaller
@@ -122,6 +75,67 @@ python -m PyInstaller build.spec --noconfirm --clean
 
 ---
 
-## License
+## 🇮🇷 فارسی
 
-This project is released under the [MIT License](LICENSE).
+### 📖 معرفی
+
+**پخش زنده ویدیو** یک برنامه دسکتاپ برای پخش ویدیو از **لینک مستقیم**
+(`http://` یا `https://`) است. کافی است لینک فایل ویدیویی را وارد کنید تا برنامه
+با **دانلود موازی** و **بافر درون‌حافظه**، ویدیو را روان و بدون قطعی پخش کند.
+
+### ✨ امکانات
+
+| امکانات | توضیح |
+| --- | --- |
+| ⚡ دانلود موازی | دریافت فایل با چند اتصال هم‌زمان برای سرعت بیشتر |
+| 🧠 بافر در RAM | حافظه موقت قابل تنظیم (پیش‌فرض: ۲۵۶ مگابایت) |
+| 📡 پشتیبانی از `Range` | پخش از سرورهای دارای Range و حالت جایگزین برای سرورهای بدون آن |
+| 🎞️ دو حالت پخش | **HTML5** درون خود برنامه، یا **VLC** برای فرمت‌هایی که مرورگر پشتیبانی نمی‌کند (MKV، AVI و…) |
+| 🔒 پروکسی لوکال | پخش از طریق پروکسی داخلی تا لینک اصلی مخفی بماند |
+| 🌑 رابط کاربری تیره | ظاهری مدرن، تیره و فارسی |
+| 🛡️ `--insecure` | نادیده گرفتن خطای گواهی HTTPS در صورت نیاز |
+
+### 🚀 نصب و اجرا از سورس
+
+پیش‌نیازها: **پایتون ۳.۱۰ یا بالاتر**
+
+```bash
+# ۱. نصب وابستگی‌ها
+pip install -r requirements.txt
+
+# ۲. اجرای برنامه
+python main.py
+```
+
+### 🎯 اجرا با پارامتر
+
+```bash
+python main.py --url https://example.com/video.mp4 --cache 512
+```
+
+#### پارامترهای خط فرمان
+
+| پارامتر | توضیح |
+| --- | --- |
+| `--url <لینک>` | لینک مستقیم ویدیو هنگام شروع |
+| `--cache <مگابایت>` | حداکثر بافر در RAM *(پیش‌فرض: ۲۵۶)* |
+| `--keep-ahead <مگابایت>` | حداکثر فاصله دریافت در حالت بدون Range *(پیش‌فرض: ۶۴)* |
+| `--workers <تعداد>` | تعداد اتصال‌های موازی دانلود *(پیش‌فرض: ۳)* |
+| `--insecure` | نادیده گرفتن خطای گواهی HTTPS |
+| `--debug` | فعال‌سازی کنسول توسعه WebView |
+
+> 💡 **نکته:** برای پخش فرمت‌هایی که مرورگر پشتیبانی نمی‌کند، باید
+> [VLC](https://www.videolan.org/vlc/) نصب باشد.
+
+### 📦 ساخت نسخه اجرایی (EXE)
+
+```bash
+pip install pyinstaller
+python -m PyInstaller build.spec --noconfirm --clean
+```
+
+---
+
+## 📄 License
+
+Released under the [MIT License](LICENSE) · Copyright © 2026 **SOHAYB N13**
