@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="color-scheme" content="dark" />
+<title>Live Video Streamer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Vazirmatn:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'" />
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Vazirmatn:wght@400;500;600;700;800&display=swap" /></noscript>
+<style>
+/*__STYLES__*/
+</style>
+</head>
+<body>
+  <!-- Ambient background: animated glow orbs + subtle grid + film grain -->
+  <div class="bg-decor" aria-hidden="true">
+    <div class="bg-orb orb-a"></div>
+    <div class="bg-orb orb-b"></div>
+    <div class="bg-orb orb-c"></div>
+    <div class="bg-grid"></div>
+  </div>
+  <div class="bg-grain" aria-hidden="true"></div>
+
+  <main class="app">
+
+    <!-- Custom glass title bar: brand + language switch + window controls -->
+    <div class="titlebar" id="titlebar">
+      <div class="brand">
+        <div class="brand-mark">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="#fff"><path d="M8 5.5v13l11-6.5z"/></svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name" data-i18n="app.name">Live Video Streamer</span>
+          <span class="brand-tag" data-i18n="app.subtitle">Stream without downloading the whole file</span>
+        </div>
+      </div>
+      <div class="tb-spacer"></div>
+
+      <div class="lang-switch" id="langSwitch" data-lang="en" role="group" aria-label="Language">
+        <div class="lang-thumb" id="langThumb"></div>
+        <button class="lang-opt" type="button" data-lang="en">EN</button>
+        <button class="lang-opt" type="button" data-lang="fa">فا</button>
+      </div>
+
+      <div class="tb-controls">
+        <button id="minBtn" class="tb-btn" type="button" data-i18n-title="tb.minimize" aria-label="Minimize">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 12h14"/></svg>
+        </button>
+        <button id="maxBtn" class="tb-btn" type="button" data-i18n-title="tb.maximize" aria-label="Maximize">
+          <svg id="iconMax" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg>
+          <svg id="iconRestore" class="hidden-svg" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 8V5.5h10.5V16H16"/><rect x="5.5" y="8" width="10.5" height="10.5" rx="2.5"/></svg>
+        </button>
+        <button id="closeBtn" class="tb-btn tb-close" type="button" data-i18n-title="tb.close" aria-label="Close">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- URL input -->
+      <section class="url-card">
+        <div class="input-wrap">
+          <svg class="input-icon" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13.5a4.5 4.5 0 0 0 6.5.5l2.7-2.7a4.5 4.5 0 0 0-6.4-6.4L11.3 6"/><path d="M14 10.5a4.5 4.5 0 0 0-6.5-.5l-2.7 2.7a4.5 4.5 0 0 0 6.4 6.4l1.5-1.5"/></svg>
+          <input id="url" type="text" data-i18n-placeholder="url.placeholder" placeholder="Enter a direct video link (http / https)..." spellcheck="false" autocomplete="off" />
+          <button id="playBtn" class="btn btn-primary" type="button">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>
+            <span data-i18n="btn.play">Play</span>
+          </button>
+          <button id="stopBtn" class="btn btn-ghost" type="button" disabled>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+            <span data-i18n="btn.stop">Stop</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Player -->
+      <section class="player" id="player">
+
+        <video id="video" playsinline preload="auto" disablepictureinpicture></video>
+
+        <div id="placeholder" class="center-card">
+          <div class="center-play">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="#fff"><path d="M8 5.5v13l11-6.5z"/></svg>
+          </div>
+          <div class="center-title" data-i18n="placeholder.title">Ready to play</div>
+          <div class="center-sub" data-i18n="placeholder.sub">Enter a direct link and press Play</div>
+        </div>
+
+        <div id="vlcCard" class="center-card hidden">
+          <div class="vlc-pulse"></div>
+          <div class="center-title" data-i18n="vlc.title">Playing in a separate VLC window</div>
+          <div class="center-sub" data-i18n="vlc.sub">This format is not supported by the browser; the picture opens in a separate window</div>
+        </div>
+
+        <div class="chip chip-status" id="statusChip">
+          <span class="dot" id="statusDot"></span>
+          <span id="statusText" data-i18n="status.idle">Ready</span>
+        </div>
+
+        <div class="chip chip-metrics" id="metricsChip">
+          <span id="speedLabel">0 B/s</span>
+          <span class="sep">·</span>
+          <span id="downloadLabel">0 B</span>
+        </div>
+
+        <div class="control-bar" id="controlBar">
+          <button id="pauseBtn" class="cb-btn" type="button" data-i18n-title="cb.pause" disabled>
+            <svg class="ic ic-play" id="iconPlay" viewBox="0 0 24 24" width="19" height="19" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>
+            <svg class="ic ic-pause hidden-svg" id="iconPause" viewBox="0 0 24 24" width="19" height="19" fill="currentColor"><rect x="6" y="5" width="4.5" height="14" rx="1.5"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.5"/></svg>
+          </button>
+
+          <button id="stopBtn2" class="cb-btn" type="button" data-i18n-title="cb.stop" disabled>
+            <svg class="ic" viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+          </button>
+
+          <div class="seek-wrap" id="seekTrack">
+            <div class="seek-buffer" id="seekBuffer"></div>
+            <div class="seek-played" id="seekPlayed"></div>
+            <div class="seek-thumb" id="seekThumb"></div>
+            <div class="seek-tooltip" id="seekTooltip">0:00</div>
+          </div>
+
+          <span class="time" id="timeLabel">0:00 / 0:00</span>
+
+          <span class="cb-status" id="cbStatus" data-i18n="status.idle">Ready</span>
+
+          <div class="volume-wrap" id="volumeWrap">
+            <button id="muteBtn" class="cb-btn" type="button" data-i18n-title="cb.mute">
+              <svg class="ic ic-vol" id="iconVol" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6.5 9H3v6h3.5L11 19z"/><path d="M15 9.5a3.5 3.5 0 0 1 0 5"/><path d="M17.5 7a7 7 0 0 1 0 10"/></svg>
+              <svg class="ic ic-mute hidden-svg" id="iconMute" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6.5 9H3v6h3.5L11 19z"/><path d="M15.5 9.5l5 5M20.5 9.5l-5 5"/></svg>
+            </button>
+            <div class="vol-track" id="volTrack">
+              <div class="vol-fill" id="volFill"></div>
+              <div class="vol-thumb" id="volThumb"></div>
+            </div>
+          </div>
+
+          <button id="fsBtn" class="cb-btn" type="button" data-i18n-title="cb.fullscreen">
+            <svg class="ic ic-fs" id="iconFs" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3.5H5.5a2 2 0 0 0-2 2V8"/><path d="M16 3.5h2.5a2 2 0 0 1 2 2V8"/><path d="M20.5 16v2.5a2 2 0 0 1-2 2H16"/><path d="M8 20.5H5.5a2 2 0 0 1-2-2V16"/></svg>
+            <svg class="ic ic-fsx hidden-svg" id="iconFsx" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3.5V6a2 2 0 0 1-2 2H3.5"/><path d="M16 3.5V6a2 2 0 0 0 2 2h2.5"/><path d="M20.5 16H18a2 2 0 0 0-2 2v2.5"/><path d="M8 20.5V18a2 2 0 0 0-2-2H3.5"/></svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- Event log -->
+      <section class="log-card" id="logCard">
+        <div class="log-head">
+          <div class="log-title">
+            <span class="log-dot"></span>
+            <span data-i18n="log.title">Events</span>
+          </div>
+          <div class="log-actions">
+            <button id="toggleLogBtn" class="btn-mini" type="button" data-i18n-title="log.toggleTitle">&#9662;</button>
+            <button id="clearLogBtn" class="btn-mini" type="button" data-i18n="log.clear">Clear</button>
+          </div>
+        </div>
+        <div id="logPanel" class="log-panel"></div>
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+  //__SCRIPT__
+  </script>
+</body>
+</html>

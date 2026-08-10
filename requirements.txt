@@ -1,0 +1,16 @@
+# Runtime dependencies
+pywebview>=5.0
+
+# Optional: HTTP client used when `requests` is available.
+# The app falls back to urllib if this is missing.
+requests>=2.31
+
+# Optional: playback backend. The app also falls back gracefully if
+# python-vlc / libvlc are not installed.
+python-vlc>=3.0
+
+# Dev / build tooling only
+# Pillow is only needed for tools/make_icon.py (generates app.ico).
+# PyInstaller is used to build a standalone exe from build.spec.
+Pillow>=10.0
+pyinstaller>=6.0

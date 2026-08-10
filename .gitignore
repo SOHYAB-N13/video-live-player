@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Build output
+dist/
+build/
+*.spec.bak
+
+# Binaries / installer output
+*.exe
+*.msi
+installer/Output/
+
+# VLC runtime (large third-party runtime copied next to the exe)
+vlc/
+libvlc.dll
+libvlccore.dll
+
+# OS / editor
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
