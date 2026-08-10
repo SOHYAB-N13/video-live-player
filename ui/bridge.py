@@ -10,10 +10,8 @@ from __future__ import annotations
 
 import re
 from collections import deque
-from typing import Optional
 
 from core.controller import StreamController
-from core.datatypes import StreamStatus
 from core.events import EventBus
 from ui.win_controls import WindowControls
 

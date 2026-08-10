@@ -288,8 +288,10 @@ class WindowControls:
         try:
             rect = RECT()
             USER32.GetWindowRect(hwnd, ctypes.byref(rect))
-            x = (int(lparam) & 0xFFFF) - rect.left
-            y = ((int(lparam) >> 16) & 0xFFFF) - rect.top
+            # lparam carries screen coordinates; sign-extend the 16-bit halves
+            # so negative coordinates (monitors left/above the primary) work.
+            x = ctypes.c_short(int(lparam) & 0xFFFF).value - rect.left
+            y = ctypes.c_short((int(lparam) >> 16) & 0xFFFF).value - rect.top
             width = rect.width
             height = rect.height
             if x < 0 or y < 0 or x >= width or y >= height:

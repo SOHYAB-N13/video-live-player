@@ -106,6 +106,33 @@ class BlockCache:
             _idx, data = self._blocks.popitem(last=False)
             self._resident -= len(data)
 
+    def flush_pending(self) -> int:
+        """Commit buffered partial blocks as-is; returns committed bytes.
+
+        In no-range mode the total size may be unknown, so the final partial
+        block never reaches the block boundary and would otherwise stay in
+        the pending buffer forever, truncating the tail of the file.
+        """
+        with self._lock:
+            committed = 0
+            for idx in sorted(self._pending):
+                buf = self._pending.pop(idx)
+                if not buf:
+                    continue
+                block = bytes(buf[:BLOCK_SIZE])
+                old = self._blocks.get(idx)
+                if old is not None:
+                    self._blocks.move_to_end(idx)
+                    if len(old) != len(block):
+                        self._resident += len(block) - len(old)
+                        self._blocks[idx] = block
+                else:
+                    self._blocks[idx] = block
+                    self._resident += len(block)
+                committed += len(block)
+            self._evict()
+            return committed
+
     # ------------------------------------------------------------------ reading
 
     def read_span(self, start: int, end: int) -> Optional[bytes]:

@@ -14,7 +14,6 @@ the :class:`core.cache.BlockCache`:
 from __future__ import annotations
 
 import threading
-import time
 from typing import Callable, Optional
 
 from .cache import BLOCK_SIZE, BlockCache
@@ -151,7 +150,7 @@ class SequentialFeeder(threading.Thread):
         self.bus = bus
         self.log = log
         self._cond = threading.Condition()
-        self._stop = threading.Event()
+        self._stop_event = threading.Event()
         self._stored = 0
         self._consumed = 0
         self._done = False
@@ -160,20 +159,25 @@ class SequentialFeeder(threading.Thread):
     # ------------------------------------------------------------------ worker
 
     def run(self) -> None:
+        position = 0  # absolute file offset of the next chunk's first byte
         try:
             for chunk in self.remote.iter_stream(
                 on_bytes=self.metrics.add_fetched,
-                cancelled=self._stop.is_set,
+                cancelled=self._stop_event.is_set,
             ):
-                if self._stop.is_set():
+                if self._stop_event.is_set():
                     break
-                stored = self.cache.store_bytes(self._stored, chunk)
-                self._stored += stored
+                stored = self.cache.store_bytes(position, chunk)
+                position += len(chunk)
                 with self._cond:
+                    self._stored += stored
                     self._cond.notify_all()
-                while (self._stored - self._consumed) > self.keep_ahead and not self._stop.is_set():
+                while (self._stored - self._consumed) > self.keep_ahead and not self._stop_event.is_set():
                     with self._cond:
                         self._cond.wait(timeout=0.25)
+            with self._cond:
+                self._stored += self.cache.flush_pending()
+                self._cond.notify_all()
             self._done = True
         except Exception as exc:  # noqa: BLE001
             self._error = exc
@@ -193,7 +197,7 @@ class SequentialFeeder(threading.Thread):
     def wait_until(self, want: int) -> int:
         """Block until at least ``want`` bytes are available (or the feeder ends)."""
         with self._cond:
-            while self._stored < want and not self._done and not self._stop.is_set():
+            while self._stored < want and not self._done and not self._stop_event.is_set():
                 self._cond.wait(timeout=0.2)
             return self._stored
 
@@ -210,8 +214,9 @@ class SequentialFeeder(threading.Thread):
         return self._error
 
     def stop(self) -> None:
-        self._stop.set()
+        self._stop_event.set()
         with self._cond:
+            self._done = True
             self._cond.notify_all()
 
 
@@ -249,7 +254,7 @@ class ReadAhead(threading.Thread):
         self.workers = max(1, int(workers))
         self.log = log or (lambda msg, level="info": None)
         self._cond = threading.Condition()
-        self._stop = threading.Event()
+        self._stop_event = threading.Event()
         self._cursor = max(0, int(initial_cursor))
 
     # ------------------------------------------------------------------ pacing
@@ -277,7 +282,7 @@ class ReadAhead(threading.Thread):
     # ------------------------------------------------------------------ workers
 
     def _worker(self) -> None:
-        while not self._stop.is_set():
+        while not self._stop_event.is_set():
             with self._cond:
                 self._maybe_reset_cursor()
                 cursor = self._cursor
@@ -290,14 +295,14 @@ class ReadAhead(threading.Thread):
                     continue
                 self._cursor = cursor + self.CHUNK
                 self._cond.notify_all()
-            if self._stop.is_set():
+            if self._stop_event.is_set():
                 break
             end = min(cursor + self.CHUNK, self.total)
             try:
-                self.fetcher.get_span(cursor, end, cancelled=self._stop.is_set)
+                self.fetcher.get_span(cursor, end, cancelled=self._stop_event.is_set)
             except Exception as exc:  # noqa: BLE001
                 self.log(f"پیش‌خوانی داده با خطا مواجه شد: {exc}", "warning")
-                if not self._stop.wait(1.0):
+                if not self._stop_event.wait(1.0):
                     continue
 
     def run(self) -> None:
@@ -311,6 +316,6 @@ class ReadAhead(threading.Thread):
             worker.join()
 
     def stop(self) -> None:
-        self._stop.set()
+        self._stop_event.set()
         with self._cond:
             self._cond.notify_all()
