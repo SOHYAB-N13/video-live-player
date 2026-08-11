@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Video Player - Stream Video From Direct Links on Windows</title>
+<meta name="description" content="Live Video Player streams online video from direct HTTP/HTTPS links on Windows. Parallel downloads, RAM cache, HTML5 in-app playback and VLC fallback. Modern dark Persian UI.">
+<meta property="og:title" content="Live Video Player">
+<meta property="og:description" content="Stream online video from direct links with a modern dark UI. HTML5 + VLC playback.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' rx='10' fill='%23DC2626'/><polygon points='16,11 30,20 16,29' fill='white'/></svg>">
+<style>
+  :root { --bg:#0b1120; --card:#111a2e; --line:#1e293b; --text:#e2e8f0; --muted:#94a3b8; --accent:#ef4444; --accent2:#8b5cf6; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+  .wrap { max-width:960px; margin:0 auto; padding:0 24px; }
+  header { padding:72px 0 48px; text-align:center; background:radial-gradient(600px 300px at 50% -10%, rgba(239,68,68,.16), transparent); }
+  .logo { font-size:15px; color:var(--muted); letter-spacing:.5px; }
+  h1 { font-size:44px; margin:12px 0 8px; background:linear-gradient(90deg,#f87171,#a78bfa); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .tagline { font-size:18px; color:var(--muted); max-width:640px; margin:0 auto 28px; }
+  .badges { margin-bottom:32px; }
+  .badges img { height:28px; margin:2px; }
+  .btn { display:inline-block; background:var(--accent); color:#fff; text-decoration:none; padding:12px 26px; border-radius:10px; font-weight:600; margin:4px; transition:transform .15s, background .15s; }
+  .btn:hover { background:#dc2626; transform:translateY(-2px); }
+  .btn.ghost { background:transparent; border:1px solid var(--line); }
+  .btn.ghost:hover { border-color:var(--accent); background:rgba(239,68,68,.08); }
+  h2 { font-size:26px; margin:48px 0 18px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px; }
+  .card h3 { font-size:17px; margin-bottom:6px; }
+  .card p { color:var(--muted); font-size:14.5px; }
+  .mono { font-family:ui-monospace,Consolas,monospace; background:#0f172a; border:1px solid var(--line); border-radius:8px; padding:14px 18px; overflow-x:auto; font-size:13.5px; }
+  code { font-family:ui-monospace,Consolas,monospace; }
+  .btnrow { margin-top:6px; }
+  footer { margin:64px 0 40px; text-align:center; color:var(--muted); font-size:14px; }
+  .lang { font-size:13px; color:var(--muted); margin-bottom:6px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="logo">🎬 LIVE VIDEO STREAMER</div>
+    <h1>Live Video Player</h1>
+    <p class="tagline">Stream online video from a direct HTTP/HTTPS link with a modern dark UI. Parallel downloads and an in-memory buffer keep playback fast, smooth and interruption-free.</p>
+    <div class="badges">
+      <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.10+">
+      <img src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" alt="MIT">
+      <img src="https://img.shields.io/badge/Platform-Windows-blue.svg?style=for-the-badge&logo=windows&logoColor=white" alt="Windows">
+    </div>
+    <div class="btnrow">
+      <a class="btn" href="https://github.com/SOHYAB-N13/video-live-player">View on GitHub</a>
+      <a class="btn ghost" href="https://github.com/SOHYAB-N13/video-live-player/releases">Releases</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <h2>Features</h2>
+  <div class="grid">
+    <div class="card"><h3>⚡ Parallel downloads</h3><p>Fetches media over multiple simultaneous connections for higher throughput.</p></div>
+    <div class="card"><h3>🧠 RAM cache</h3><p>Configurable in-memory buffer (default 256 MiB) smooths playback on slow links.</p></div>
+    <div class="card"><h3>🎞️ HTML5 playback</h3><p>Streams directly inside the app with native seeking and full controls.</p></div>
+    <div class="card"><h3>📼 VLC fallback</h3><p>Plays formats the browser can't — MKV, AVI and more — via the bundled VLC engine.</p></div>
+    <div class="card"><h3>📡 Range support</h3><p>Works with Range-capable servers and falls back gracefully for servers without it.</p></div>
+    <div class="card"><h3>🔒 Loopback proxy</h3><p>Streams through a local proxy so your original media link stays hidden.</p></div>
+  </div>
+
+  <h2>Quick start</h2>
+  <div class="mono">pip install -r requirements.txt<br>python main.py</div>
+  <p style="color:var(--muted);font-size:14px;margin-top:10px;">Play a link on startup: <code>python main.py --url "https://example.com/video.mp4" --cache 512</code></p>
+
+  <h2>Install &amp; run</h2>
+  <div class="mono"># 1. Clone the repository<br>git clone https://github.com/SOHYAB-N13/video-live-player.git<br><br># 2. Install dependencies<br>pip install -r requirements.txt<br><br># 3. Run<br>python main.py</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="lang">🌐 <a href="#top" style="color:var(--muted)">English</a> — README also available in <a href="https://github.com/SOHYAB-N13/video-live-player#%F0%9F%87%AE%F0%9F%87%B7-%D9%81%D8%A7%D8%B1%D8%B3%DB%8C" style="color:var(--muted)">فارسی</a></p>
+    <p>© 2026 <a href="https://github.com/SOHYAB-N13" style="color:var(--muted)">SOHAYB N13</a> · Released under the MIT License</p>
+  </div>
+</footer>
+
+</body>
+</html>
