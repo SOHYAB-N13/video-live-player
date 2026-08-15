@@ -21,6 +21,9 @@
   .badges img { height:28px; margin:2px; }
   .btn { display:inline-block; background:var(--accent); color:#fff; text-decoration:none; padding:12px 26px; border-radius:10px; font-weight:600; margin:4px; transition:transform .15s, background .15s; }
   .btn:hover { background:#dc2626; transform:translateY(-2px); }
+  .btn.download { background:#16a34a; box-shadow:0 8px 24px rgba(22,163,74,.35); }
+  .btn.download:hover { background:#15803d; }
+  .screenshot { display:block; margin:24px auto 0; max-width:720px; width:100%; border-radius:16px; border:1px solid var(--line); box-shadow:0 20px 60px rgba(0,0,0,.45); }
   .btn.ghost { background:transparent; border:1px solid var(--line); }
   .btn.ghost:hover { border-color:var(--accent); background:rgba(239,68,68,.08); }
   h2 { font-size:26px; margin:48px 0 18px; }
@@ -48,9 +51,11 @@
       <img src="https://img.shields.io/badge/Platform-Windows-blue.svg?style=for-the-badge&logo=windows&logoColor=white" alt="Windows">
     </div>
     <div class="btnrow">
+      <a class="btn download" href="https://github.com/SOHYAB-N13/video-live-player/releases/latest/download/LiveVideoPlayer.exe">⬇️ Download for Windows</a>
       <a class="btn" href="https://github.com/SOHYAB-N13/video-live-player">View on GitHub</a>
       <a class="btn ghost" href="https://github.com/SOHYAB-N13/video-live-player/releases">Releases</a>
     </div>
+    <img class="screenshot" src="live.png" alt="Live Video Player screenshot">
   </div>
 </header>
 
@@ -65,6 +70,13 @@
     <div class="card"><h3>📡 Range support</h3><p>Works with Range-capable servers and falls back gracefully for servers without it.</p></div>
     <div class="card"><h3>🔒 Loopback proxy</h3><p>Streams through a local proxy so your original media link stays hidden.</p></div>
   </div>
+
+  <h2>Download</h2>
+  <p style="color:var(--muted);margin-bottom:16px;">Latest release — Windows 10/11. Requires WebView2 Runtime.</p>
+  <p>
+    <a class="btn download" href="https://github.com/SOHYAB-N13/video-live-player/releases/latest/download/LiveVideoPlayer.exe">⬇️ Download Live Video Player</a>
+    <a class="btn ghost" href="https://github.com/SOHYAB-N13/video-live-player/releases/latest">Release notes</a>
+  </p>
 
   <h2>Quick start</h2>
   <div class="mono">pip install -r requirements.txt<br>python main.py</div>
